@@ -1,0 +1,25 @@
+
+MACHINES = {
+  :movik => {
+        :box_name => "movik6",
+    },
+}
+
+Vagrant.configure("2") do |config|
+ config.vm.box = "movik6" 
+ 
+ config.vm.provider "virtualbox" do |v| 
+ v.memory = 256 
+ v.cpus = 1 
+ end 
+ config.vm.define "stream" do |stream| 
+ stream.vm.hostname = "stream" 
+ end 
+ 
+	config.vm.provision "shell", inline: <<-SHELL
+	      mkdir -p ~root/.ssh
+              cp ~vagrant/.ssh/auth* ~root/.ssh
+	      yum install -y redhat-lsb-core wget rpmdevtools rpm-build createrepo yum-utils gcc
+  	SHELL
+end
+
